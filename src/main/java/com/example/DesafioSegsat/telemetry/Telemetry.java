@@ -46,12 +46,12 @@ public class Telemetry {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Telemetry telemetry = (Telemetry) o;
-        return Objects.equals(id, telemetry.id);
+        return Objects.equals(id, telemetry.id) && Objects.equals(sensorId, telemetry.sensorId) && Objects.equals(temperature, telemetry.temperature) && Objects.equals(humidity, telemetry.humidity) && Objects.equals(pressure, telemetry.pressure) && Objects.equals(createdAt, telemetry.createdAt) && Objects.equals(updatedAt, telemetry.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id, sensorId, temperature, humidity, pressure, createdAt, updatedAt);
     }
 
     @Override

@@ -20,10 +20,26 @@ public class TelemetryService {
 
     @KafkaListener(topics = "telemetry-data", groupId = "telemetry", containerFactory = "telemetryKafkaListenerFactory")
     public void consumeTelemetry(telemetryConsumerDTO dto) {
-        createTelemetry(dto);
+        try {
+            createTelemetry(dto);
+        } catch (Exception e){
+            log.error("INVALID TELEMETRY LOG. ERROR MESSAGE: {}", e.getMessage());
+        }
     }
 
     private void createTelemetry(telemetryConsumerDTO dto) {
+        if(dto.temperature() < -273){
+            throw new RuntimeException("Temperature is under 273 graus");
+        }
+
+        if(dto.humidity() < 0 || dto.humidity() > 100){
+            throw new RuntimeException("Humidity is not between 0% to 100% ");
+        }
+
+        if(dto.sensorId() <= 0){
+            throw new RuntimeException("Sensor id is under 0");
+        }
+
         Telemetry telemetry = new Telemetry();
         BeanUtils.copyProperties(dto, telemetry);
 
